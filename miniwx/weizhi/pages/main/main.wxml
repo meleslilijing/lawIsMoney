@@ -1,0 +1,7 @@
+<import src="../../common/foot.wxml" />
+
+<view class="container">
+  <view  bindtap="bindViewTap" class="userinfo">
+  	<p>main</p>
+  </view>
+</view>

@@ -1,65 +1,71 @@
+index
 {% extends "web/base.html" %}
-{% load custom_filter %}
+
 {% block content %}
-    {% paginate article_list 8 %}
-    {% if article_list %}
-    <section class="mysection">
-        <h4 class="index-title">
-            <a href="{% url "web:article" pk=0 %}"><i class="el-th-list"></i>{% if category %}列表{% else %} 全部 {% endif %} &nbsp;&nbsp;> &nbsp;&nbsp;</a>
-            <span class="orange-text">{{ category }}</span>
-            <span style="float:right;margin-right:10px;">共有文章:<a class="orange-text"> {{ count }} </a>篇</span>
-        </h4>
-        <div class="arclist">
-            <!--列表开始-->
-            <ul>
-                {% for article in article_list %}
-                    <li {% if article.view > 500 %}id="tuijian"{% elif article.view > 100 %} id="Hot" {% endif %}>
-                    <div class="arcimg">
 
-                        <img src="{{ article.picture }}"
-                             alt="{{ article.title }}" title="{{ article.title }}"/>
-                    </div>
-                    <div class="arc-right">
-                        <h4 class="blue-text"><a href="{% url "web:detail" pk=article.id %}" title="{{ article.title }}">{{ article.title }}</a></h4>
-                        <p>{{ article.digest }}</p>
-                        <ul>
-                            <li><a title="{{ article.author }} {{ article.date_time }} 发表 "><i class="el-time"></i> {{ article.date_time }}</a></li>
-                            <li><a href="#" title="作者： {{ article.author }}"><i class="el-user"></i>{{ article.author }}</a></li>
-                            <li><a href="#" title="已有 {{ article.comment }} 条评论"><i class="el-comment"></i>{{ article.comment }}</a>
-                            </li>
-                            <li><a title="已有 {{ article.view }} 次浏览"><i class="el-eye-open"></i>{{ article.view }}</a></li>
-                            <li class="mob-hidden">
-                                <i class="el-tag"></i>
-                                <a href="#">{{ article.tag.values| getTag }}</a>&nbsp;
-                            </li>
-                            <li><a href="{% url "web:article" pk=article.category_id %}" title="查看分类"><i class="el-th-list"></i>{{ article.category }}</a></li>
-                        </ul>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
-            <!--列表结束-->
+<section class="mysection">
+    <div class="swiper-container">
+        <ul class="slides swiper-wrapper">
+
+            <li class="swiper-slide">
+                <a href="#" title="活着，想那么多干嘛!">
+                    <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1492080772539&di=fc95f383c53577c2e3a7953c6768a3e6&imgtype=0&src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201702%2F23%2F102051df9vecu9wk4phvu1.jpg"
+                         alt="活着，想那么多干嘛!"/>
+                </a>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+                <span class="silde-title">活着，想那么多干嘛!</span>
+            </li>
+
+            <li class="swiper-slide">
+                <a href="#" title="Life is short, use Python">
+                    <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1492227875875&di=b0a1db96b40a162bbf75270ebcb08990&imgtype=0&src=http%3A%2F%2Fgslb.richidc.com%2Finc%2Fimg%2Fpythonset.png"
+                         alt="Life is short, use Python"/>
+                </a>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+                <span class="silde-title">Life is short, use Python</span>
+            </li>
+        </ul>
+
+        <!-- Add Arrows -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+
+
+    <div class="arclist">
+        <h4 class="index-title homeh4"><a href=""><i class="el-certificate"></i>最新文章
+            <small>New Article</small>
+        </a></h4>
+        <!--列表开始-->
+        <ul>
+            {% for article in article_list %}
+            <li id="New">
+                <div class="arcimg">
+                    <img src="{{ article.picture }}" alt="{{ article.title }}" title="{{ article.title }}"/>
+                </div>
+                <div class="arc-right">
+                    <h4 class="blue-text"><a href="{% url "web:detail" pk=article.id %}" title="{{ article.title }}">{{ article.title }}</a></h4>
+                    <p>{{ article.digest }}</p>
+                    <ul>
+                        <li><a title="{{ article.author }}{{ article.date_time }} 发表 "><i
+                                class="el-time"></i> {{ article.date_time }}</a></li>
+                        <li><a href="#" title="作者： {{ article.author }}"><i
+                                class="el-user"></i>{{ article.author }}</a></li>
+                        <li><a href="#" title="已有 {{ article.comment }} 条评论"><i
+                                class="el-comment"> {{ article.comment }}</i></a>
+                        </li>
+                        <li><a title="已有 {{ article.view }} 次浏览"><i class="el-eye-open"></i>{{ article.view }}
+                        </a></li>
+                        <li><a href="#" title="查看分类"><i class="el-th-list"></i>{{ article.category }}</a></li>
+                    </ul>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <!--列表结束-->
         </div>
-        <!--分页-->
-
-        <div class="pagination">
-            <div class="list-page">
-                <ul class="post-data">
-                    <li><a>第 {{ current_page }} - {{ last_page }} 页</a> <a>共 {{ count }} 条</a></li>
-                </ul>
-            </div>
-            <ul>
-
-                <li {% if current_page == 1 %}class="active"{% endif %}><a href="?page=1">首页</a></li>
-                <li {% if current_page >= 2 %} {% else %}class="active"{% endif %}><a href="?page={{ current_page|add:-1 }}">上一页</a></li>
-                <li {% if current_page < last_page %} {% else %}class="active"{% endif %}><a href="?page={{ current_page|add:1 }}">下一页</a></li>
-                <li {% if current_page == last_page %}class="active"{% endif %}><a href="?page={{ last_page }}">尾页</a></li>
-            </ul>
-        </div>
-
-    </section>
-    {% else %}
-    <section class="mysection" style="animation: fuxiasuo 0.8s;">暂时没有任何文章。</section>
-    {% endif %}
+</section>
 
 {% endblock %}
